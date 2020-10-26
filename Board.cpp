@@ -11,14 +11,24 @@
 #include "Board.h"
 #include "Color.h"
 #include "Display.h"
-
-const int CELL_WIDTH = 10;
-const int CELL_HEIGHT = 4;
-
-const int BOARD_WIDTH = 8;
-const int BOARD_HEIGHT = 3;
+#include "Square.h"
 
 Board::Board() {
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+        for (int col = 0; col < BOARD_WIDTH; col++) {
+            if (row != 1 && (col == 4 || col == 5)) {
+                this->grid[row][col] = nullptr;
+                continue;
+            }
+            this->grid[row][col] = new Square();
+        }
+    }
+
+    grid[0][0]->SetStar(true);
+    grid[2][0]->SetStar(true);
+    grid[1][3]->SetStar(true);
+    grid[0][6]->SetStar(true);
+    grid[2][6]->SetStar(true);
 }
 
 Board::Board(const Board& orig) {
@@ -27,48 +37,42 @@ Board::Board(const Board& orig) {
 Board::~Board() {
 }
 
-void display_edge_row(bool skip_middle) {
-    for (int i = 0; i < BOARD_WIDTH; i++) {
-        char cInside = '-';
-        char cEdge = '+';
-        if (skip_middle && (i == 4 || i == 5)) {
-          cInside = ' ';
-          if (i == 5)
-              cEdge = ' ';
-        }
-
-        std::cout << cEdge;
-
-        for (int j = 0; j < CELL_WIDTH; j++) {
-          std::cout << cInside;
-        }
-    }
-    std::cout << '+' << std::endl;
-}
-
-void display_empty_row(bool skip_middle) {
-    for (int i = 0; i < BOARD_WIDTH; i++) {
-
-        char c = '|';
-        if (skip_middle && i == 5) {
-            c = ' ';
-        }
-
-        std::cout << c;
-        for (int j = 0; j < CELL_WIDTH; j++) {
-            std::cout << ' ';
-        }
-    }
-    std::cout << '|' << std::endl;
-}
-
 void Board::ShowBoard() {
-    Display::BeginColor(COLOR["Yellow"].AsFG());
+    Display::BeginColor(COLOR["Blue"].AsFG());
 
     for (int row = 0; row < BOARD_HEIGHT; row++) {
-        display_edge_row(row == 0);
-        for (int i = 0; i < CELL_HEIGHT; i++)
-            display_empty_row(row != 1);
+        int start = row == 0 ? 0 : 1;
+        for (int y = start; y < CELL_HEIGHT; y++) {
+            for (int col = 0; col < BOARD_WIDTH; col++) {
+                for (int x = 0; x < CELL_WIDTH; x++) {
+                    char c;
+                    if (grid[row][col] == nullptr) {
+                        if (x == CELL_WIDTH - 1 || (x == 0 && grid[row][col - 1] == nullptr)) {
+                            continue;
+                        }
+                        if (y == CELL_HEIGHT - 1 && row < BOARD_HEIGHT - 1 && grid[row + 1][col] != nullptr) {
+                            c = grid[row + 1][col]->GetDisplayCharAt(x + 1, 0);
+                        } else {
+                            c = ' ';
+                        }
+                    }
+                    else {
+                        if (x == 0) {
+                            if (col == 0 || grid[row][col - 1] == nullptr) {
+                                c = grid[row][col]->GetDisplayCharAt(x, y);
+                            } else {
+                                continue;
+                            }
+                        } else {
+                            c = grid[row][col]->GetDisplayCharAt(x, y);
+                        }
+                    }
+
+                    std::cout << c;
+                }
+            }
+            Display::NewLine();
+        }
     }
-    display_edge_row(true);
+    Display::EndFormat();
 }

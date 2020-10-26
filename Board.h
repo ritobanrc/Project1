@@ -14,6 +14,12 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include <array>
+#include "Square.h"
+
+constexpr int BOARD_WIDTH = 8;
+constexpr int BOARD_HEIGHT = 3;
+
 class Board {
 public:
     Board();
@@ -22,6 +28,7 @@ public:
 
     void ShowBoard();
 private:
+    std::array<std::array<Square*, BOARD_WIDTH>, BOARD_HEIGHT> grid;
 
 };
 
