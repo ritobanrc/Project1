@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   main.cpp
  * Author: ritoban
@@ -11,14 +5,25 @@
  * Created on October 25, 2020, 6:55 PM
  */
 
-#include <cstdlib>
+#include <iostream>
+#include "Display.h"
+#include "Color.h"
+
+#include <map>
+
+std::map<std::string, Color> COLOR = Color::CreateColorMap();
 
 using namespace std;
 
-/*
- * 
- */
 int main(int argc, char** argv) {
+
+
+    Display::BeginColor(COLOR["Red"].AsFG());
+    Display::BeginBold();
+    cout << "Welcome to the Royal Game of Ur!";
+    Display::EndFormat();
+    Display::NewLine();
+
 
     return 0;
 }
