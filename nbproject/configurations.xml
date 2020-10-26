@@ -9,6 +9,7 @@
       <itemPath>DiceRoller.h</itemPath>
       <itemPath>Display.h</itemPath>
       <itemPath>Game.h</itemPath>
+      <itemPath>Piece.h</itemPath>
       <itemPath>Square.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -22,6 +23,7 @@
       <itemPath>Color.cpp</itemPath>
       <itemPath>DiceRoller.cpp</itemPath>
       <itemPath>Game.cpp</itemPath>
+      <itemPath>Piece.cpp</itemPath>
       <itemPath>Square.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -64,6 +66,10 @@
       <item path="Game.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Game.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Piece.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Piece.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Square.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -109,6 +115,10 @@
       <item path="Game.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Game.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Piece.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Piece.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Square.cpp" ex="false" tool="1" flavor2="0">
       </item>

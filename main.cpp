@@ -8,6 +8,7 @@
 #include "Display.h"
 #include "Color.h"
 #include "Board.h"
+#include "Game.h"
 #include "DiceRoller.h"
 
 #include <iostream>
@@ -28,9 +29,12 @@ int main(int argc, char** argv) {
     Display::EndFormat();
     Display::NewLine();
 
-    Board board;
+    Game game;
+    if (!game.AddPiece(black)) {
+        cerr << "Failed to add piece";
+    }
+    game.board.ShowBoard();
 
-    board.ShowBoard();
 
     DiceRoller roller;
     roller.RollDice();

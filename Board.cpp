@@ -29,6 +29,9 @@ Board::Board() {
     grid[1][3]->SetStar(true);
     grid[0][6]->SetStar(true);
     grid[2][6]->SetStar(true);
+
+    whiteStartSquare = grid[2][3];
+    blackStartSquare = grid[0][3];
 }
 
 Board::Board(const Board& orig) {

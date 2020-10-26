@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   Game.h
  * Author: ritoban
@@ -14,12 +8,34 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <set>
+#include <list>
+#include "Piece.h"
+#include "Board.h"
+
+enum Side { white, black };
+
 class Game {
 public:
     Game();
     Game(const Game& orig);
     virtual ~Game();
+
+    bool AddPiece(Side);
+
+    Board board;
 private:
+    std::set<Piece*> whitePieces;
+    std::set<Piece*> blackPieces;
+
+    int remainingWhitePieces;
+    int remainingBlackPieces;
+
+    int completedWhitePieces;
+    int completedBlackPieces;
+
+    std::list<Square*> whitePath;
+    std::list<Square*> blackPath;
 
 };
 

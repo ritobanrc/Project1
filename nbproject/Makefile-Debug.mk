@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Color.o \
 	${OBJECTDIR}/DiceRoller.o \
 	${OBJECTDIR}/Game.o \
+	${OBJECTDIR}/Piece.o \
 	${OBJECTDIR}/Square.o \
 	${OBJECTDIR}/main.o
 
@@ -86,6 +87,11 @@ ${OBJECTDIR}/Game.o: Game.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Game.o Game.cpp
+
+${OBJECTDIR}/Piece.o: Piece.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Piece.o Piece.cpp
 
 ${OBJECTDIR}/Square.o: Square.cpp
 	${MKDIR} -p ${OBJECTDIR}

@@ -14,6 +14,10 @@
 #ifndef SQUARE_H
 #define SQUARE_H
 
+//#include "Piece.h"
+//
+class Piece;
+
 class Square {
 public:
     Square();
@@ -22,6 +26,8 @@ public:
 
     char GetDisplayCharAt(int, int);
     void SetStar(bool val) { isStarSquare = val; }
+
+    Piece* piece;
 private:
     bool isStarSquare;
 

@@ -27,6 +27,10 @@ public:
     virtual ~Board();
 
     void ShowBoard();
+    Square* GetSquare(int x, int y) { return grid[y][x]; }
+
+    Square* whiteStartSquare;
+    Square* blackStartSquare;
 private:
     std::array<std::array<Square*, BOARD_WIDTH>, BOARD_HEIGHT> grid;
 
