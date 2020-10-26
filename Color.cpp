@@ -12,7 +12,11 @@
  */
 
 #include "Color.h"
+
+#include <map>
 #include <string>
+
+std::map<std::string, Color> COLOR = Color::CreateColorMap();
 
 Color::Color(uint8_t val) : inner(val) {
 }

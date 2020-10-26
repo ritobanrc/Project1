@@ -19,6 +19,8 @@ public:
     Board();
     Board(const Board& orig);
     virtual ~Board();
+
+    void ShowBoard();
 private:
 
 };

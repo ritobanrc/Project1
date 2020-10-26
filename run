@@ -1,5 +1,1 @@
-make
-
-echo "-------------------- RUN --------------------"
-
-dist/Debug/CLang-Linux/project1
+make && echo "-------------------- RUN --------------------" && dist/Debug/CLang-Linux/project1

@@ -8,15 +8,15 @@
 #include <iostream>
 #include "Display.h"
 #include "Color.h"
+#include "Board.h"
 
 #include <map>
+#include <string>
 
-std::map<std::string, Color> COLOR = Color::CreateColorMap();
 
 using namespace std;
 
 int main(int argc, char** argv) {
-
 
     Display::BeginColor(COLOR["Red"].AsFG());
     Display::BeginBold();
@@ -24,6 +24,9 @@ int main(int argc, char** argv) {
     Display::EndFormat();
     Display::NewLine();
 
+    Board board;
+
+    board.ShowBoard();
 
     return 0;
 }

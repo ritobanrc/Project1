@@ -12,6 +12,7 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+
 /* This class represents a Color -- specicially a 4 bit color based on ANSI escape sequences. See https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences for more info */
 class Color {
 public:
@@ -29,6 +30,8 @@ public:
 
     uint8_t inner;
 };
+
+extern std::map<std::string, Color> COLOR;
 
 
 #endif /* COLOR_H */
