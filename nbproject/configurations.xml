@@ -6,6 +6,7 @@
                    projectFiles="true">
       <itemPath>Board.h</itemPath>
       <itemPath>Color.h</itemPath>
+      <itemPath>DiceRoller.h</itemPath>
       <itemPath>Display.h</itemPath>
       <itemPath>Game.h</itemPath>
       <itemPath>Square.h</itemPath>
@@ -19,6 +20,7 @@
                    projectFiles="true">
       <itemPath>Board.cpp</itemPath>
       <itemPath>Color.cpp</itemPath>
+      <itemPath>DiceRoller.cpp</itemPath>
       <itemPath>Game.cpp</itemPath>
       <itemPath>Square.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
@@ -52,6 +54,10 @@
       <item path="Color.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Color.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="DiceRoller.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="DiceRoller.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Display.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -93,6 +99,10 @@
       <item path="Color.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Color.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="DiceRoller.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="DiceRoller.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Display.h" ex="false" tool="3" flavor2="0">
       </item>
