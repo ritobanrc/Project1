@@ -25,6 +25,7 @@ public:
 
     void RollDice();
     void ShowDiceRoller();
+    int CountDice() { return dice.count(); };
 private:
 
     std::bitset<4> dice;

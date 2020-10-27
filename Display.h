@@ -24,6 +24,10 @@ class Display {
       static void EndFormat() { std::cout << "\033[0m"; }
 
 
+      template <typename T> static void Print(T x) {
+        std::cout << x;
+      }
+
       template <typename T> static void PrintBold(T x) {
         Display::BeginBold();
         std::cout << x;

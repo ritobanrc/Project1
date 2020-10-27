@@ -14,8 +14,8 @@
 #ifndef SQUARE_H
 #define SQUARE_H
 
-//#include "Piece.h"
-//
+#include <utility>
+
 class Piece;
 
 class Square {
@@ -28,6 +28,8 @@ public:
     void SetStar(bool val) { isStarSquare = val; }
 
     Piece* piece;
+    // The int describes the move number to display, the bool is true if it should be shown.
+    std::pair<int, bool> moveNumber;
 private:
     bool isStarSquare;
 

@@ -8,10 +8,12 @@
 #include "Square.h"
 #include <string>
 #include <vector>
+#include <utility>
 
 Square::Square() {
     this->isStarSquare = false;
     this->piece = nullptr;
+    this->moveNumber = std::make_pair(0, false);
 }
 
 Square::Square(const Square& orig) {
@@ -27,17 +29,17 @@ char Square::GetDisplayCharAt(int i, int j) {
     const std::vector<std::string> star ={
 R"(     ,    )",
 R"(  __/ \__ )",
-R"(  \     / )",
+R"(  \  *  / )",
 R"(  /_   _\ )",
 R"(    \ /   )",
 R"(     '    )" };
 
     const std::vector<std::string> pieceGFX ={
-R"(     ___    )",
-R"(    / . \   )",
-R"(   |. * .|  )",
-R"(   |  .  |  )",
-R"(    \___/   )",
+R"(    ___     )",
+R"(   / . \    )",
+R"(  |. * .|   )",
+R"(  |  .  |   )",
+R"(   \___/    )",
 R"(            )" };
 
 
@@ -48,6 +50,9 @@ R"(            )" };
     } else if (verticalEdge) {
         return '-';
     } else {
+        if (this->moveNumber.second && i == 6 && j == 3) {
+            return this->moveNumber.first + '0';
+        }
         if (this->piece != nullptr && (j - 1) < pieceGFX.size() && i < pieceGFX[0].size()) {
             return pieceGFX[j - 1][i];
         }

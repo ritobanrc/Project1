@@ -30,15 +30,7 @@ int main(int argc, char** argv) {
     Display::NewLine();
 
     Game game;
-    if (!game.AddPiece(black)) {
-        cerr << "Failed to add piece";
-    }
-    game.board.ShowBoard();
-
-
-    DiceRoller roller;
-    roller.RollDice();
-    roller.ShowDiceRoller();
+    game.PlayGame();
 
     return 0;
 }
