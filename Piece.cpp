@@ -17,3 +17,8 @@ Piece::Piece(const Piece& orig) {
 Piece::~Piece() {
 }
 
+void Piece::AdvanceUntil(Square* s) {
+    while(*path != s) {
+        path++;
+    }
+}

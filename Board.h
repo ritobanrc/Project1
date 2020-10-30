@@ -16,6 +16,7 @@
 
 #include <array>
 #include "Square.h"
+#include "SideData.h"
 
 constexpr int BOARD_WIDTH = 8;
 constexpr int BOARD_HEIGHT = 3;
@@ -23,14 +24,13 @@ constexpr int BOARD_HEIGHT = 3;
 class Board {
 public:
     Board();
-    Board(const Board& orig);
     virtual ~Board();
 
     void ShowBoard();
     Square* GetSquare(int x, int y) { return grid[y][x]; }
+    void ClearPossibleMoves();
 
-    Square* whiteStartSquare;
-    Square* blackStartSquare;
+    SideData<Square*> startSquare;
 private:
     std::array<std::array<Square*, BOARD_WIDTH>, BOARD_HEIGHT> grid;
 

@@ -14,13 +14,12 @@
 #include "Piece.h"
 #include "Board.h"
 #include "DiceRoller.h"
+#include "SideData.h"
 
-enum Side { white, black };
 
 class Game {
 public:
     Game();
-    Game(const Game& orig);
     virtual ~Game();
 
     void PlayGame();
@@ -32,31 +31,18 @@ public:
     };
 
     std::deque<Move> GetPossibleMoves();
+    void ApplyMove(Move);
 
     Board board;
     DiceRoller diceRoller;
+
+    // This is public because there's a getter inside SideData
+    SideData<std::set<Piece*>> pieces;
+    SideData<int> remainingPieces;
+    SideData<int> completedPieces;
+    SideData<std::list<Square*>> path;
+
 private:
-    std::set<Piece*> whitePieces;
-    std::set<Piece*> blackPieces;
-
-    int remainingWhitePieces;
-    int remainingBlackPieces;
-
-    int completedWhitePieces;
-    int completedBlackPieces;
-
-    std::list<Square*> whitePath;
-    std::list<Square*> blackPath;
-
-    inline std::list<Square*>& GetPath(Side s) {
-        if (s == white) {
-            return this->whitePath;
-        } else {
-            return this->blackPath;
-        }
-    }
-
-
     Side turn = white;
 };
 

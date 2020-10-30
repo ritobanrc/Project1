@@ -8,18 +8,17 @@
 #include "Game.h"
 #include "Piece.h"
 #include "Display.h"
+#include "SideData.h"
 #include <set>
 #include <list>
 #include <deque>
 #include <algorithm>
 #include <utility>
+#include <thread>
 
-Game::Game() {
-    remainingWhitePieces = remainingBlackPieces = 7;
-    completedWhitePieces = completedBlackPieces = 0;
-
-    whitePieces = std::set<Piece*>();
-    blackPieces = std::set<Piece*>();
+Game::Game() : pieces(std::set<Piece*>(), std::set<Piece*>()), remainingPieces(7, 7), completedPieces(0, 0), path(std::list<Square*>(), std::list<Square*>()) {
+    std::list<Square*>& whitePath = path.Get(white);
+    std::list<Square*>& blackPath = path.Get(black);
 
     for (int i = 3; i >= 0; i--) {
         whitePath.push_back(board.GetSquare(i, 2));
@@ -41,32 +40,68 @@ Game::Game() {
     blackPath.push_back(nullptr);
 }
 
-Game::Game(const Game& orig) {
-}
-
 Game::~Game() {
 }
 
 void Game::PlayGame() {
-    board.ShowBoard();
+    using namespace std::chrono_literals;
+    while (true) {
+        board.ShowBoard();
 
-    Display::PrintBold("Turn: ");
-    Display::BeginColor(COLOR["White"].AsFG());
-    Display::PrintBold("WHITE");
-    Display::EndFormat();
-    Display::NewLine();
+        Display::PrintBold("Turn: ");
+        Display::BeginColor(COLOR["White"].AsFG());
+        Display::PrintBold("WHITE");
+        Display::EndFormat();
+        Display::NewLine();
 
-    Display::Print("Press any key to roll dice...");
-    std::cin.ignore();
+        Display::Print("Press ENTER to roll dice...");
+        std::cin.ignore(INT32_MAX, '\n');
 
-    diceRoller.RollDice();
-    diceRoller.ShowDiceRoller();
+        diceRoller.RollDice();
+        diceRoller.ShowDiceRoller();
 
-    auto moves = GetPossibleMoves();
-    int moveNumber = 0;
-    std::for_each(moves.begin(), moves.end(), [&](Game::Move m){ m.target->moveNumber = std::make_pair(moveNumber, true); moveNumber++; });
+        Display::PrintUnderlined(diceRoller.CountDice());
+        if (diceRoller.CountDice() == 0) {
+            Display::BeginColor(COLOR.at("Red").AsFG());
+            std::cout << "ZERO! Better luck next time!";
+            Display::EndFormat();
+            return;
+        }
 
-    board.ShowBoard();
+        Display::Print("Press ENTER to get possible moves...");
+        std::cin.get();
+
+        auto moves = GetPossibleMoves();
+
+        if (moves.empty()) {
+            Display::BeginColor(COLOR.at("Red").AsFG());
+            Display::Print("No possible moves!");
+            continue;
+        }
+
+        int moveNumber = 1;
+        std::for_each(moves.begin(), moves.end(), 
+                [&](Game::Move m){ 
+                m.target->moveNumber = std::make_pair(moveNumber, true);
+                moveNumber++; 
+        });
+
+        Display::PrintBold("Possible Moves: \n");
+
+        board.ShowBoard();
+
+        std::cout << "Please select a move between 1 and " << moves.size(); 
+        Display::NewLine();
+
+        int moveSelected;
+        std::cin >> moveSelected;
+        this->ApplyMove(moves.at(moveSelected - 1));
+        board.ClearPossibleMoves();
+
+        //std::cin.ignore();
+
+        std::this_thread::sleep_for(1s);
+    }
 
 }
 
@@ -78,18 +113,38 @@ std::deque<Game::Move> Game::GetPossibleMoves() {
         return moves; // welp you miss a turn!
     }
 
-    auto path = GetPath(turn).begin();;
+    auto thisSidePath = this->path.Get(turn).begin();
     // we can move up to rolled number of times
     // start at 1 because we're adding a new piece to the board
     for (int i = 1; i < rolled; i++) {
-        path++;
+      thisSidePath++;
     }
-    if ((*path)->piece == nullptr) {
-        // it's empty!
-        auto m = Game::Move();
-        m.piece = nullptr;
-        m.target = *path;
-        moves.push_back(m);
+    if ((*thisSidePath)->piece == nullptr) {
+      // it's empty!
+      auto m = Game::Move();
+      m.piece = nullptr;
+      m.target = *thisSidePath;
+      moves.push_back(m);
+    }
+
+
+    std::set<Piece*>& thisSidePieces = pieces.Get(turn);
+    for (auto piece = thisSidePieces.begin(); piece != thisSidePieces.end(); piece++) {
+        auto pos = (*piece)->GetPosition();
+        // advance the iterator by however much we rolled
+        int n = rolled;
+        while (n > 0) {
+            n--;
+            pos++;
+        }
+
+        Square* s = *pos;
+        if (s->piece == nullptr) {
+            auto m = Game::Move();
+            m.piece = *piece;
+            m.target = *pos;
+            moves.push_back(m);
+        }
     }
 
     return moves;
@@ -98,25 +153,34 @@ std::deque<Game::Move> Game::GetPossibleMoves() {
 /// Tries to add a piece to the board. Returns false if the start square is already occupied.
 bool Game::AddPiece(Side s) {
     Piece* piece;
-    switch (s) {
-        case white:
-            if (board.whiteStartSquare->piece == nullptr) {
-                piece = new Piece(whitePath.cbegin());
-                whitePieces.insert(piece);
-                board.whiteStartSquare->piece = piece;
-            } else {
-                return false;
-            }
-            break;
-        case black:
-            if (board.blackStartSquare->piece == nullptr) {
-                piece = new Piece(blackPath.cbegin());
-                blackPieces.insert(piece);
-                board.blackStartSquare->piece = piece;
-            } else {
-                return false;
-            }
-            break;
+
+    if (board.startSquare.Get(s)->piece == nullptr) {
+        piece = new Piece(path.Get(s).cbegin());
+        pieces.Get(s).insert(piece);
+        remainingPieces.Get(s)--;
+        board.startSquare.Get(s)->piece = piece;
+    } else {
+        return false;
     }
     return true;
+}
+
+void Game::ApplyMove(Game::Move m) {
+    if (m.piece == nullptr) {
+        std::list<Square*>::iterator pos = path.Get(turn).begin();
+        while (*(pos) != m.target) {
+            pos++;
+        }
+
+        Piece* piece = new Piece(pos);
+        (*pos)->piece = piece;
+        pieces.Get(turn).insert(piece);
+        remainingPieces.Get(turn)--;
+
+    } else {
+        Square* currentPos = *(m.piece->GetPosition());
+        currentPos->piece = nullptr;
+        m.piece->AdvanceUntil(m.target);
+        m.target->piece = m.piece;
+    }
 }

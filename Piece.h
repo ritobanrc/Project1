@@ -17,7 +17,10 @@ public:
     Piece(const Piece& orig);
     virtual ~Piece();
 
+    std::list<Square*>::const_iterator GetPosition() { return path; }
+    void AdvanceUntil(Square*);
 private:
+    // This is a pointer into the path of where the piece is right now.
     std::list<Square*>::const_iterator path;
 
 

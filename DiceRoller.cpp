@@ -40,6 +40,7 @@ R"( /_____\ )" };
     std::vector<std::string> diceWithPip = diceArt;
     diceWithPip[2][4] = '.';
 
+    Display::NewLine();
     for (int y = 0; y < diceArt.size(); y++) {
         for (int d = 0; d < dice.size(); d++) {
             if (this->dice[d]) {
@@ -51,4 +52,6 @@ R"( /_____\ )" };
         }
         std::cout << std::endl;
     }
+
+    Display::NewLine();
 }

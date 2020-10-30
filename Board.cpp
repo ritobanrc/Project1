@@ -13,7 +13,7 @@
 #include "Display.h"
 #include "Square.h"
 
-Board::Board() {
+Board::Board() : startSquare(nullptr, nullptr) {
     for (int row = 0; row < BOARD_HEIGHT; row++) {
         for (int col = 0; col < BOARD_WIDTH; col++) {
             if (row != 1 && (col == 4 || col == 5)) {
@@ -30,11 +30,8 @@ Board::Board() {
     grid[0][6]->SetStar(true);
     grid[2][6]->SetStar(true);
 
-    whiteStartSquare = grid[2][3];
-    blackStartSquare = grid[0][3];
-}
-
-Board::Board(const Board& orig) {
+    startSquare.Get(white) = grid[2][3];
+    startSquare.Get(black) = grid[0][3];
 }
 
 Board::~Board() {
@@ -42,6 +39,7 @@ Board::~Board() {
 
 void Board::ShowBoard() {
     Display::BeginColor(COLOR["Blue"].AsFG());
+    Display::NewLine();
 
     for (int row = 0; row < BOARD_HEIGHT; row++) {
         int start = row == 0 ? 0 : 1;
@@ -78,4 +76,15 @@ void Board::ShowBoard() {
         }
     }
     Display::EndFormat();
+}
+
+void Board::ClearPossibleMoves() {
+    for (auto row = grid.cbegin(); row != grid.cend(); row++) {
+        for (auto square = row->cbegin(); square != row->cend(); square++) {
+            Square* s = *square;
+            if (s != nullptr && s->moveNumber.second) {
+                s->moveNumber.second = false;
+            }
+        }
+    }
 }

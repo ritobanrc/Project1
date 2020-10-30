@@ -10,6 +10,7 @@
       <itemPath>Display.h</itemPath>
       <itemPath>Game.h</itemPath>
       <itemPath>Piece.h</itemPath>
+      <itemPath>SideData.h</itemPath>
       <itemPath>Square.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -71,6 +72,8 @@
       </item>
       <item path="Piece.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="SideData.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Square.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Square.h" ex="false" tool="3" flavor2="0">
@@ -119,6 +122,8 @@
       <item path="Piece.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Piece.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SideData.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Square.cpp" ex="false" tool="1" flavor2="0">
       </item>
