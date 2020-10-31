@@ -20,7 +20,7 @@ Board::Board() : startSquare(nullptr, nullptr) {
                 this->grid[row][col] = nullptr;
                 continue;
             }
-            this->grid[row][col] = new Square();
+            this->grid[row][col] = new Square(col);
         }
     }
 

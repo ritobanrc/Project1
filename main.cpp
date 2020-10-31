@@ -36,8 +36,8 @@ int main(int argc, char** argv) {
                The game is a race game, with rules similar to Ludo or 
                Parcheesi. Each player has 7 pieces, which they must get
                through the entire board. Each turn, the player rolls the
-               4 tetrahedral dice, each with two white marks at two corners.  
-               You move forward based on the number of white marks. The first
+               4 tetrahedral dice, each with two marks at two corners.  
+               You move forward based on the number of marks. The first
                player to get all of their pieces off the board wins.
                However, if you land on one of your opponent's pieces, you 
                "capture" that piece and it gets sent back.

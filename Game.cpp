@@ -102,8 +102,12 @@ void Game::PlayGame(bool againstComputer) {
             continue;
         }
 
+        std::sort(moves.begin(), moves.end(), [](Move a, Move b){
+                return a.target->xPos > b.target->xPos;
+        });
+
+
         int moveNumber = 1;
-        std::cout << "Got here move number" << std::endl;
         std::for_each(moves.begin(), moves.end(), 
             [&](Game::Move m){ 
                 if (m.target != nullptr) {

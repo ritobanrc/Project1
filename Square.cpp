@@ -13,7 +13,7 @@
 #include <vector>
 #include <utility>
 
-Square::Square() {
+Square::Square(int x) : xPos(x) {
     this->isStarSquare = false;
     this->piece = nullptr;
     this->moveNumber = std::make_pair(0, false);
