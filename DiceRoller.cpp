@@ -8,7 +8,6 @@
 #include "DiceRoller.h"
 #include "Display.h"
 #include <set>
-#include <iterator>
 #include <cstdlib>
 #include <iostream>
 #include <vector>

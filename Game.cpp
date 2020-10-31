@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <utility>
 #include <thread>
+#include <cstdlib>
 
 Game::Game() : pieces(std::set<Piece*>(), std::set<Piece*>()), remainingPieces(7, 7), completedPieces(0, 0), path(std::list<Square*>(), std::list<Square*>()) {
     std::list<Square*>& whitePath = path.Get(white);
@@ -36,30 +37,36 @@ Game::Game() : pieces(std::set<Piece*>(), std::set<Piece*>()), remainingPieces(7
     }
 }
 
+std::string side_str(Side s) {
+    if (s == white) {
+        return "WHITE";
+    } else {
+        return "BLACK";
+    }
+}
+
+
 Game::~Game() {
 }
 
-void Game::PlayGame() {
-    auto a = path.Get(white).cbegin();
-    for (int i = 0; i < 11; i++) {
-        a++;
-    }
-    Move m;
-    m.piece = nullptr;
-    m.target = *a;
-    this->ApplyMove(m);
-
-
-    using namespace std::chrono_literals;
+void Game::PlayGame(bool againstComputer) {
     while (true) {
+        Display::BeginBold();
+        std::cout << "BLACK Remaining Pieces: " << remainingPieces.Get(black) << std::endl;
+        std::cout << "BLACK Finished Pieces: " << completedPieces.Get(black) << std::endl;
+        Display::EndFormat();
         board.ShowBoard();
+        Display::BeginBold();
+        std::cout << "WHITE Remaining Pieces: " << remainingPieces.Get(white) << std::endl;
+        std::cout << "WHITE Finished Pieces: " << completedPieces.Get(white) << std::endl;
+        Display::EndFormat();
 
         Display::PrintBold("Turn: ");
         if (turn == white) {
-            Display::BeginColor(COLOR["White"].AsFG());
+            Display::BeginColor(COLOR["Green"].AsFG());
             Display::PrintBold("WHITE");
         } else {
-            Display::BeginColor(COLOR["Green"].AsFG());
+            Display::BeginColor(COLOR["Black"].AsFG());
             Display::PrintBold("BLACK");
         }
         Display::EndFormat();
@@ -74,13 +81,16 @@ void Game::PlayGame() {
         if (diceRoller.CountDice() == 0) {
             Display::BeginColor(COLOR.at("Red").AsFG());
             std::cout << "ZERO! Better luck next time!";
+            Display::NewLine();
             Display::EndFormat();
             NextTurn();
             continue;
         }
 
-        Display::Print("Press ENTER to get possible moves...");
-        std::cin.ignore();
+        if (!againstComputer || turn == white) {
+            Display::Print("Press ENTER to get possible moves...");
+            std::cin.ignore();
+        }
 
         auto moves = GetPossibleMoves();
 
@@ -92,8 +102,12 @@ void Game::PlayGame() {
             continue;
         }
 
+        std::sort(moves.begin(), moves.end(), [](Move a, Move b){
+                return a.target->xPos > b.target->xPos;
+        });
+
+
         int moveNumber = 1;
-        std::cout << "Got here move number" << std::endl;
         std::for_each(moves.begin(), moves.end(), 
             [&](Game::Move m){ 
                 if (m.target != nullptr) {
@@ -106,14 +120,18 @@ void Game::PlayGame() {
 
         Display::PrintBold("Possible Moves: \n");
 
-        board.ShowBoard();
-
-        std::cout << "Please select a move between 1 and " << moves.size(); 
-        Display::NewLine();
-
         int moveSelected;
-        std::cin >> moveSelected;
-        std::cin.ignore();
+        if (!againstComputer || turn == white) {
+            board.ShowBoard();
+
+            std::cout << "Please select a move between 1 and " << moves.size(); 
+            Display::NewLine();
+
+            std::cin >> moveSelected;
+            std::cin.ignore();
+        } else {
+            moveSelected = rand() % moves.size() + 1;
+        }
         Move move = moves.at(moveSelected - 1);
         this->ApplyMove(move);
         board.ClearPossibleMoves();
@@ -126,6 +144,13 @@ void Game::PlayGame() {
 
             continue;
         }
+
+        if (completedPieces.Get(turn) == 7) {
+            Display::BeginBold();
+            std::cout << side_str(turn) << " WINS!!!!!!" << std::endl;
+            return;
+        }
+
 
         NextTurn();
     }
@@ -140,18 +165,20 @@ std::deque<Game::Move> Game::GetPossibleMoves() {
         return moves; // welp you miss a turn!
     }
 
-    auto thisSidePath = this->path.Get(turn).begin();
-    // we can move up to rolled number of times
-    // start at 1 because we're adding a new piece to the board
-    for (int i = 1; i < rolled; i++) {
-      thisSidePath++;
-    }
-    if ((*thisSidePath)->piece == nullptr) {
-      // it's empty!
-      auto m = Game::Move();
-      m.piece = nullptr;
-      m.target = *thisSidePath;
-      moves.push_back(m);
+    if (remainingPieces.Get(turn) > 0) {
+        auto thisSidePath = this->path.Get(turn).begin();
+        // we can move up to rolled number of times
+        // start at 1 because we're adding a new piece to the board
+        for (int i = 1; i < rolled; i++) {
+          thisSidePath++;
+        }
+        if ((*thisSidePath)->piece == nullptr) {
+          // it's empty!
+          auto m = Game::Move();
+          m.piece = nullptr;
+          m.target = *thisSidePath;
+          moves.push_back(m);
+        }
     }
 
 
@@ -180,7 +207,7 @@ std::deque<Game::Move> Game::GetPossibleMoves() {
         }
 
         Square* s = *pos;
-        if (s->piece == nullptr || s->piece->side != (*piece)->side) {
+        if (s->piece == nullptr || (s->piece->side != (*piece)->side && s->GetStar() == false)) {
             // either we're at the end, we're moving to an empty square, or we can capture a piece.
             auto m = Game::Move();
             m.piece = *piece;
@@ -207,15 +234,6 @@ bool Game::AddPiece(Side s) {
     return true;
 }
 
-std::string side_str(Side s) {
-    if (s == white) {
-        return "WHITE";
-    } else {
-        return "BLACK";
-    }
-}
-
-
 void Game::ApplyMove(Game::Move m) {
     if (m.piece == nullptr) {
         std::list<Square*>::iterator pos = path.Get(turn).begin();
@@ -229,7 +247,6 @@ void Game::ApplyMove(Game::Move m) {
         remainingPieces.Get(turn)--;
 
     } else {
-        std::cout << "Got here 1" << std::endl;
         Square* currentPos = *(m.piece->GetPosition());
         currentPos->piece = nullptr;
 
@@ -241,10 +258,8 @@ void Game::ApplyMove(Game::Move m) {
             Display::EndFormat();
 
             this->pieces.Get(turn).erase(m.piece);
-            std::cout << "erased" << std::endl;
 
             completedPieces.Get(turn)++;
-        std::cout << "Incremented" << std::endl;
             return;
         }
 

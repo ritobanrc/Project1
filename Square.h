@@ -20,7 +20,7 @@ class Piece;
 
 class Square {
 public:
-    Square();
+    Square(int);
     Square(const Square& orig);
     virtual ~Square();
 
@@ -31,6 +31,7 @@ public:
     Piece* piece;
     // The int describes the move number to display, the bool is true if it should be shown.
     std::pair<int, bool> moveNumber;
+    int xPos; // for sorting
 private:
     bool isStarSquare;
 

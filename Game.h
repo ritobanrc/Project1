@@ -22,7 +22,7 @@ public:
     Game();
     virtual ~Game();
 
-    void PlayGame();
+    void PlayGame(bool);
     bool AddPiece(Side);
 
     struct Move {

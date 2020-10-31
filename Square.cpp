@@ -13,7 +13,7 @@
 #include <vector>
 #include <utility>
 
-Square::Square() {
+Square::Square(int x) : xPos(x) {
     this->isStarSquare = false;
     this->piece = nullptr;
     this->moveNumber = std::make_pair(0, false);
@@ -58,9 +58,9 @@ R"(            )" };
         }
         if (this->piece != nullptr && (j - 1) < pieceGFX.size() && i < pieceGFX[0].size()) {
             if (this->piece->side == white) {
-                Display::BeginColor(COLOR["White"].AsFG());
-            } else {
                 Display::BeginColor(COLOR["Green"].AsFG());
+            } else {
+                Display::BeginColor(COLOR["Black"].AsFG());
             }
             return pieceGFX[j - 1][i];
         }
