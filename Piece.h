@@ -10,15 +10,18 @@
 
 #include <list>
 #include "Square.h"
+#include "SideData.h"
 
 class Piece {
 public:
-    Piece(std::list<Square*>::const_iterator);
+    Piece(Side, std::list<Square*>::const_iterator);
     Piece(const Piece& orig);
     virtual ~Piece();
 
     std::list<Square*>::const_iterator GetPosition() { return path; }
     void AdvanceUntil(Square*);
+
+    Side side;
 private:
     // This is a pointer into the path of where the piece is right now.
     std::list<Square*>::const_iterator path;

@@ -5,7 +5,10 @@
  * Created on October 26, 2020, 8:37 AM
  */
 
+#include "SideData.h"
 #include "Square.h"
+#include "Display.h"
+#include "Piece.h"
 #include <string>
 #include <vector>
 #include <utility>
@@ -54,9 +57,15 @@ R"(            )" };
             return this->moveNumber.first + '0';
         }
         if (this->piece != nullptr && (j - 1) < pieceGFX.size() && i < pieceGFX[0].size()) {
+            if (this->piece->side == white) {
+                Display::BeginColor(COLOR["White"].AsFG());
+            } else {
+                Display::BeginColor(COLOR["Green"].AsFG());
+            }
             return pieceGFX[j - 1][i];
         }
         else if (isStarSquare && (j - 1) < star.size() && i < star[0].size()) {
+            Display::BeginColor(COLOR["Yellow"].AsFG());
             return star[j - 1][i];
         } else {
             return ' ';

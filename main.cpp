@@ -21,7 +21,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    srand(time(0));
+    srand(0);
 
     Display::BeginColor(COLOR["Red"].AsFG());
     Display::BeginBold();

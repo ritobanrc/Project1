@@ -8,7 +8,7 @@
 #include "Piece.h"
 #include <list>
 
-Piece::Piece(std::list<Square*>::const_iterator path) : path(path) {
+Piece::Piece(Side s, std::list<Square*>::const_iterator path) : side(s), path(path) {
 }
 
 Piece::Piece(const Piece& orig) {

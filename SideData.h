@@ -8,6 +8,8 @@
 #ifndef SIDEDATA_H
 #define SIDEDATA_H
 
+#include <string>
+
 enum Side { white, black };
 
 /// A small wrpaper class that represents a piece of data that exists for both sides, and a convience method for accessing the corect one. 

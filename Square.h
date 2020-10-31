@@ -26,6 +26,7 @@ public:
 
     char GetDisplayCharAt(int, int);
     void SetStar(bool val) { isStarSquare = val; }
+    bool GetStar() { return isStarSquare; }
 
     Piece* piece;
     // The int describes the move number to display, the bool is true if it should be shown.

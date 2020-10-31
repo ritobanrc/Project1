@@ -54,7 +54,18 @@ void Board::ShowBoard() {
                         if (y == CELL_HEIGHT - 1 && row < BOARD_HEIGHT - 1 && grid[row + 1][col] != nullptr) {
                             c = grid[row + 1][col]->GetDisplayCharAt(x + 1, 0);
                         } else {
-                            c = ' ';
+                            // end space
+                            if (col == 5 && x == 6 && y == 3) {
+                                if (endMoveNumber.Get(white) > 0 && row == 2) {
+                                    c = endMoveNumber.Get(white) + '0';
+                                } else if (endMoveNumber.Get(black) > 0 && row == 0) {
+                                    c = endMoveNumber.Get(black) + '0';
+                                } else {
+                                    c = ' ';
+                                }
+                            } else {
+                                c = ' ';
+                            }
                         }
                     }
                     else {
@@ -70,6 +81,7 @@ void Board::ShowBoard() {
                     }
 
                     std::cout << c;
+                    Display::BeginColor(COLOR["Blue"].AsFG());
                 }
             }
             Display::NewLine();
@@ -79,6 +91,8 @@ void Board::ShowBoard() {
 }
 
 void Board::ClearPossibleMoves() {
+    this->endMoveNumber.Get(white) = -1;
+    this->endMoveNumber.Get(black) = -1;
     for (auto row = grid.cbegin(); row != grid.cend(); row++) {
         for (auto square = row->cbegin(); square != row->cend(); square++) {
             Square* s = *square;

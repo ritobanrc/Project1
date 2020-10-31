@@ -31,6 +31,7 @@ public:
     void ClearPossibleMoves();
 
     SideData<Square*> startSquare;
+    SideData<int> endMoveNumber = SideData<int>(-1, -1);
 private:
     std::array<std::array<Square*, BOARD_WIDTH>, BOARD_HEIGHT> grid;
 

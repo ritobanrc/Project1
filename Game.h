@@ -32,6 +32,7 @@ public:
 
     std::deque<Move> GetPossibleMoves();
     void ApplyMove(Move);
+    void NextTurn();
 
     Board board;
     DiceRoller diceRoller;
